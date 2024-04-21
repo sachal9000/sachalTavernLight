@@ -1,0 +1,56 @@
+Q1:
+
+local function releaseStorage(player)
+	player:setStorageValue(1000, -1)
+end
+
+
+function onLogout(player)
+
+	--Storage Value could be something other than 1 or -1; we need to check that it's not -1, 
+	--not that it is a specific individual number
+	if player:getStorageValue(1000) ~= -1 then
+		--addEvent's second parameter is not an index but a timer, so the original call would
+		--have simply wasted time before actually executing releaseStorage
+		releaseStorage(player)
+	end
+	return true
+end
+
+Q2:
+
+function printSmallGuildNames(memberCount)
+-- This method prints names of all guilds that have less maximum members than the memberCount arg.
+	local selectGuildQuery = "SELECT name FROM guilds WHERE max_members < %d;"
+
+	--original "resultId" line would have stored a query that was never run, and the result
+	--variable referenced in the following line would not exist. Corrected to actually create
+	--"result" directly.
+	local result = db.getResult(string.format(selectGuildQuery, memberCount))
+
+	--Added loop as we need to actually get all guild names from the result, not just one
+	if result:getID() ~= 1 then
+		repeat
+		local guildName = result.getString("name")
+		print(guildName)
+		until not result:next()
+	end
+end
+
+
+Q3:
+
+function do_sth_with_PlayerParty(playerId, membername)
+
+	--Corrected bad constructor syntax
+	player = Player:new(playerId)
+	local party = player:getParty()
+
+	for k,v in pairs(party:getMembers()) do
+		if v == player:membername then
+			--Corrected: original syntax called a constructor instead of a field and
+			--referenced the class rather than the instance
+			party:removeMember(player:membername)
+		end
+	end
+end
