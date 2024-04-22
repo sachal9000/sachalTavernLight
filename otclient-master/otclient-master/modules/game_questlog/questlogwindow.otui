@@ -32,4 +32,9 @@ QuestLogWindow < MainWindow
     width: 90
     animation: sliding 5s linear 0s infinite reverse
     animation-play-state: running
-    @onClick: self:destroy()
+    @onClick: |
+      function(self)
+        local value = self:getY() - 10
+        if value > 30 then self:setY(value) end
+        if value < 30 then self:setY(350) end
+      end

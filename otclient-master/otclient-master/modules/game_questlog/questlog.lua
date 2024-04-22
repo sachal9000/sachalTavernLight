@@ -35,26 +35,25 @@ function onGameQuestLog(quests)
   destroyWindows()
 
   questLogWindow = g_ui.createWidget('QuestLogWindow', rootWidget)
+  local questList = questLogWindow:getChildById('questList')
 
-  --local questList = questLogWindow:getChildById('questList')
+  for i,questEntry in pairs(quests) do
+    local id, name, completed = unpack(questEntry)
 
-  --for i,questEntry in pairs(quests) do
-  --  local id, name, completed = unpack(questEntry)
-
-    --local questLabel = g_ui.createWidget('QuestLabel', questList)
-    --questLabel:setOn(completed)
-    --questLabel:setText(name)
-    --questLabel.onDoubleClick = function()
-    --  questLogWindow:hide()
-    --  g_game.requestQuestLine(id)
-    --end
-  --end
+    local questLabel = g_ui.createWidget('QuestLabel', questList)
+    questLabel:setOn(completed)
+    questLabel:setText(name)
+    questLabel.onDoubleClick = function()
+      questLogWindow:hide()
+      g_game.requestQuestLine(id)
+    end
+  end
 
   questLogWindow.onDestroy = function()
     questLogWindow = nil
   end
 
-  --questList:focusChild(questList:getFirstChild())
+  questList:focusChild(questList:getFirstChild())
 end
 
 function onGameQuestLine(questId, questMissions)
@@ -86,3 +85,4 @@ function onGameQuestLine(questId, questMissions)
 
   missionList:focusChild(missionList:getFirstChild())
 end
+
